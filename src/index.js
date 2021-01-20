@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './ConversorMoedas';
 import reportWebVitals from './reportWebVitals';
+import ConversorMoedas from './ConversorMoedas';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ConversorMoedas />
   </React.StrictMode>,
   document.getElementById('root')
 );
