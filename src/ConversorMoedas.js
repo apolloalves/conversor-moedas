@@ -21,6 +21,7 @@ function ConversorMoedas() {
   const [ formValidado , setFormValidado] = useState(false)
   const [ exibirModal, setExibirModal] = useState(false)
   const [ resultadoConversao, setResultadoConversao] = useState('');
+  const [ exibirMensagemErro, setExibirMensagemErro] = useState( false)
 
 
   
@@ -67,13 +68,19 @@ function ConversorMoedas() {
       axios.get(FIXER_URL)
       .then(res => {
         const cotacao = obterCotacao(res.data)
-        setResultadoConversao( `${valor} ${moedaDe} = ${cotacao} ${moedaPara}` )
-        setExibirModal(true)
-        setExibirSpinner( false )
+        if( cotacao) {
+          setResultadoConversao( `${valor} ${moedaDe} = ${cotacao} ${moedaPara}` )
+          setExibirModal(true)
+          setExibirSpinner( false )
+          setExibirMensagemErro(false)
+        
+        }else{
+          exibirErro();
+
+        }
 
       })
-     
-
+      .catch(err => exibirErro())
     }
   }
 
@@ -91,13 +98,17 @@ function ConversorMoedas() {
 
   }
 
+  function exibirErro() {
+    setExibirMensagemErro(true)
+    setExibirSpinner( false )
+  }
 
   return(
     //react sempre espera um bloco de codigo inicio e fim
     
     <div>
       <h1>Conversor de moedas</h1>
-      <Alert variant="danger" show={false}>Erro obtendo dados de conversão, tente novamente.</Alert>
+      <Alert variant="danger" show={exibirMensagemErro}>Erro obtendo dados de conversão, tente novamente.</Alert>
       <Jumbotron>
     
       {/* "noValidade" -> Indicate that the form is not to be validated on submit: */}
