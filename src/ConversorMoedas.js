@@ -137,7 +137,7 @@ function ConversorMoedas() {
 
           </Col>
           <Col sm="2">
-          <Button variant="success" type="submit">
+          <Button variant="success" type="submit" data-testId="btn-converter">
         
           {/* escondendo spinner com condicao ternario */}
             <span className={exibirSpinner ? null : 'hidden'}>
@@ -152,7 +152,7 @@ function ConversorMoedas() {
 
           </Form.Row>
         </Form>
-        <Modal show={exibirModal} onHide={handleFecharModal}>
+        <Modal show={exibirModal} onHide={handleFecharModal} data-testeId="modal">
           
           <Modal.Header closeButton>
             <Modal.Title>Conversão</Modal.Title>
