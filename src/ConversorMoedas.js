@@ -14,6 +14,10 @@ function ConversorMoedas() {
   const [ moedaDe, setMoedaDe] = useState('BRL')
   const [ moedaPara, setMoedaPara ] = useState( 'USD'); 
   const [ exibirSpinner, setExibirSpinner ] = useState(false);
+  const [ formValidado , setFormValidado] = useState(false)
+  const [ exibirModal, setExibirModal] = useState(false)
+  const [ resultadoConversao, setResultadoConversao] = useState('');
+
 
   
   function handleValor( event ) {
@@ -24,10 +28,30 @@ function ConversorMoedas() {
 
   function handleMoedaDe( event ) {
     setMoedaDe( event.target.value )
+    
   }
 
   function handleMoedaPara( event ) {
     setMoedaPara(event.target.value )
+
+  }
+
+  function handleFecharModal( event ) {
+    setValor('1')
+    setMoedaDe('BRL')
+    setMoedaPara('USD')
+    setFormValidado(false)
+    setExibirModal(false)
+  }
+
+  function converter( event ) {
+    event.preventDefault()
+    setFormValidado( true )
+
+    if(event.currentTarget.checkValidity() === true) {
+      //TODO implmentar a chamada ao Fixer.IO
+      setExibirModal(true)
+    }
   }
 
 
@@ -39,7 +63,9 @@ function ConversorMoedas() {
       <h1>Conversor de moedas</h1>
       <Alert variant="danger" show={false}>Erro obtendo dados de conversão, tente novamente.</Alert>
       <Jumbotron>
-        <Form>
+    
+      {/* "noValidade" -> Indicate that the form is not to be validated on submit: */}
+        <Form onSubmit={converter} noValidade validated={formValidado}>
           
           <Form.Row>
             <Col sm="3">
@@ -79,18 +105,18 @@ function ConversorMoedas() {
 
           </Form.Row>
         </Form>
-        <Modal show={false}>
+        <Modal show={exibirModal} onHide={handleFecharModal}>
           
           <Modal.Header closeButton>
             <Modal.Title>Conversão</Modal.Title>
           </Modal.Header>
           
           <Modal.Body>
-            Resultado da conversão aqui...
+           {resultadoConversao}
           </Modal.Body>
         
           <Modal.Footer>
-            <Button variant="success">Nova Conversão</Button>
+            <Button variant="success" onClick={handleFecharModal}>Nova Conversão</Button>
           </Modal.Footer>
        </Modal>
 
