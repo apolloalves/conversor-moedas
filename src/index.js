@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './ConversorMoedas';
 import reportWebVitals from './reportWebVitals';
 import ConversorMoedas from './ConversorMoedas';
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+
 
 ReactDOM.render(
   <React.StrictMode>
