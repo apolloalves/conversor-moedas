@@ -4,11 +4,15 @@ import React, { useState } from 'react'
 import './ConversorMoedas.css';
 import { Jumbotron, Form, Button, Col, Spinner, Alert, Modal } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDoubleRight, faFileExport } from '@fortawesome/free-solid-svg-icons'
 import ListarMoedas from './ListarMoedas'
+import axios from 'axios'
 
 
 function ConversorMoedas() {
+
+  //usando o Axios para requisoes http 
+  const FIXER_URL = 'http://data.fixer.io/api/latest?access_key=236a579ddcc708789b044bf4c54d9575'
 
   const [ valor, setValor ] = useState('1')
   const [ moedaDe, setMoedaDe] = useState('BRL')
@@ -45,15 +49,47 @@ function ConversorMoedas() {
   }
 
   function converter( event ) {
+    //quebra o evento de reload da pagina 
     event.preventDefault()
+    //faz a validação do form
     setFormValidado( true )
 
     if(event.currentTarget.checkValidity() === true) {
       //TODO implmentar a chamada ao Fixer.IO
-      setExibirModal(true)
+      
+      // Fazendo requisao 
+
+      // exibi o Spinner para evitar multiplos cliques
+      setExibirSpinner( true )
+      
+      //requisicao do tipo GET com promisses
+      //
+      axios.get(FIXER_URL)
+      .then(res => {
+        const cotacao = obterCotacao(res.data)
+        setResultadoConversao( `${valor} ${moedaDe} = ${cotacao} ${moedaPara}` )
+        setExibirModal(true)
+        setExibirSpinner( false )
+
+      })
+     
+
     }
   }
 
+  function obterCotacao( dadosCotacao ) {
+    if(!dadosCotacao || dadosCotacao.success !== true ) {
+      return false;
+    }
+
+    const cotacaoDE = dadosCotacao.rates[moedaDe]
+    const cotacaoPara = dadosCotacao.rates[moedaPara]
+    const cotacao = (1 / cotacaoDE * cotacaoPara) * valor 
+    
+    return cotacao.toFixed(2)
+
+
+  }
 
 
   return(
