@@ -11,12 +11,26 @@ import ListarMoedas from './ListarMoedas'
 function ConversorMoedas() {
 
   const [ valor, setValor ] = useState('1')
+  const [ moedaDe, setMoedaDe] = useState('BRL')
+  const [ moedaPara, setMoedaPara ] = useState( 'USD'); 
+  const [ exibirSpinner, setExibirSpinner ] = useState(false);
 
+  
   function handleValor( event ) {
     //atualizar o estado do valor e remove tudo o que noa for numero
     setValor(event.target.value.replace(/\D/g, ''))
 
   }
+
+  function handleMoedaDe( event ) {
+    setMoedaDe( event.target.value )
+  }
+
+  function handleMoedaPara( event ) {
+    setMoedaPara(event.target.value )
+  }
+
+
 
   return(
     //react sempre espera um bloco de codigo inicio e fim
@@ -33,7 +47,7 @@ function ConversorMoedas() {
             </Col>
             
             <Col sm="3">
-            <Form.Control as="select" custom>
+            <Form.Control as="select" value={moedaDe} onChange={handleMoedaDe}>
                 <ListarMoedas />
             </Form.Control>
             </Col>
@@ -44,14 +58,21 @@ function ConversorMoedas() {
 
           <Col Col sm="3">
 
-            <Form.Control as="select" custom>
+            <Form.Control as="select" value={moedaPara} onChange={handleMoedaPara}>
             <ListarMoedas />
             </Form.Control>
 
           </Col>
           <Col sm="2">
           <Button variant="success" type="submit">
-            <Spinner animation="border" size="sm"/>Converter
+        
+          {/* escondendo spinner com condicao ternario */}
+            <span className={exibirSpinner ? null : 'hidden'}>
+              <Spinner animation="border" size="sm"/>
+            </span>
+            <span className={exibirSpinner ? 'hidden' : null}>
+              Converter
+            </span>
           </Button>
 
           </Col>
